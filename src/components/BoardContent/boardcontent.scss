@@ -1,0 +1,38 @@
+@import "../../variable";
+
+.board-content {
+   overflow-x: auto;
+   overflow-y: hidden;
+   height: $board-content-height;
+   display: flex;
+   &::-webkit-scrollbar {
+      -webkit-appearance: none;
+   }
+   &::-webkit-scrollbar:horizontal {
+      height: 11px;
+   }
+   &::-webkit-scrollbar-thumb {
+      background-color: darken($card-bg-item, 15);
+      border-bottom: 6px solid $board-bg-color;
+      border-radius: $card-border-radius;
+   }
+   
+   .addNew-column{
+
+      width: 255px;
+      height: 32px;
+      font-size: 15px;
+      line-height: 32px;
+      color: white;
+      
+      padding: 4px 0 4px 15px;
+      margin-left: $gap;
+      border-radius: $column-border-radius;
+      cursor: pointer;
+      background-color: hsla(0, 0%, 100%, .24);
+      &:hover{
+         background-color: hsla(0, 0%, 100%, .14);
+      }
+   }
+
+}

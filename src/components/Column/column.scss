@@ -1,0 +1,81 @@
+@import "../../variable";
+
+$column-height: calc(#{$board-content-height} - #{$gap * 2});
+.column {
+   flex: 0 0 auto;
+   width: 300px;
+   height: $column-height;
+   height: calc(100%);
+   margin-left: $gap;
+
+   > * {
+      background-color: $card-bg-color;
+      color: $text-color-main;
+      padding: 0 8px;
+   }
+   header {
+      padding-left: 15px;
+      height: $column-header-height;
+      line-height: $column-header-height;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border-top-left-radius: $column-border-radius;
+      border-top-right-radius: $column-border-radius;
+   }
+   footer {
+      padding-left: 10px;
+      line-height: $column-footer-height;
+      font-size: 16px;
+      height: $column-footer-height;
+      border-bottom-left-radius: $column-border-radius;
+      border-bottom-right-radius: $column-border-radius;
+      color: #888;
+
+      .footer-actions{
+         margin-left: $gap;
+         &:hover{
+            color: $text-color-main;
+         }
+      }
+   }
+   .card-list {
+      list-style: none;
+      margin: 0;
+      max-height: calc(#{$column-height} - #{$column-header-height} - #{$column-footer-height});
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+         -webkit-appearance: none;
+      }
+      &::-webkit-scrollbar:vertical {
+         width: 11px;
+      }
+      &::-webkit-scrollbar-thumb {
+         background-color: darken($card-bg-item, 15);
+         border-right: 6px solid $card-bg-color;
+         border-radius: $card-border-radius;
+      }
+
+      .card-ghost-drop {
+         font-weight: bold;
+         transition: transform 0.18s ease-in-out;
+         transform: rotateZ(deg);
+      }
+
+      .opacity-ghost {
+         transition: all 0.18s ease;
+         opacity: 0.8;
+         cursor: ns-resize;
+         transform: rotateZ(5deg); 
+         font-weight: bold;
+         background-color: cornflowerblue;
+         box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.3);
+         cursor: ns-resize;
+      }
+      .card-drop-preview {
+         background-color: rgba(150, 150, 200, 0.1);
+         border: 1px dashed #abc;
+         margin: 5px;
+      }
+   }
+}

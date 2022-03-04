@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap");
+
+$board-bg-color: rgb(117, 226, 255);
+$appbar-bg-color: rgb(41, 166, 250);
+$card-bg-color: rgb(196, 255, 247);
+$card-bg-item: rgb(255, 255, 255);
+
+$text-color-main: #333;
+
+$gap: 10px;
+$column-border-radius: 8px;
+$card-border-radius: 5px;
+$column-header-height: 36px;
+$column-footer-height: 36px;
+
+//4 + 5 + 90 = 99 vh and 1vh for scroll bar
+$navbar-app-height:4vh;
+$navbar-board-height:5vh;
+$board-content-height:90vh;
+
+// responsive size
+$scream-lg: 1201px;
+$scream-md: 992px;
+$scream-sm: 768px;
+$scream-phone: 480px;

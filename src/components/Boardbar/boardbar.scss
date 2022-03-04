@@ -1,0 +1,16 @@
+@import "../../variable";
+
+.navbar-board {
+   height: $navbar-board-height;
+   padding-left: $gap;
+   display: flex;
+   align-items: center;
+   background-color: $board-bg-color;
+   font-size: 1.1rem;
+}
+
+.column-drop-preview {
+   background-color: rgba(150, 150, 200, 0.1);
+   border: 1px dashed #abc;
+   margin: 5px 45px 5px 5px;
+}

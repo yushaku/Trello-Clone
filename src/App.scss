@@ -1,0 +1,20 @@
+@import './variable';
+
+* {
+   margin: 0;
+   padding: 0;
+   font-family: "Source Sans Pro", sans-serif;
+   line-height: 1.3em;
+   font-size: 14px;
+}
+.App {
+   height: 100vh;
+   overflow: hidden;
+   background-color: $board-bg-color;
+
+   .icon{
+      font-size: 14px;
+      margin-right: 5px;
+
+   }
+}
