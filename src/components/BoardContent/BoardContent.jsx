@@ -40,11 +40,14 @@ function BoardContent() {
 
    const onColumnDrop = (dropResult) => {
       let newColumns = [...columns];
-      let newBoard = { ...board };
-
+      
       newColumns = applyDrag(newColumns, dropResult);
+
+      let newBoard = { ...board };
       newBoard.columnOrder = newColumns.map(column => column.id)
       newBoard.columns = newColumns
+
+      console.log(newColumns)
 
       setColumns(newColumns);
       setBoard(newBoard);
@@ -55,7 +58,6 @@ function BoardContent() {
          let newColumns = [...columns]
          let currentColumns = newColumns.find(column => column.id === columnId)
 
-         console.log(currentColumns)
          currentColumns.cards = applyDrag(currentColumns.cards, dropResult)
          currentColumns.cardOrder = currentColumns.cards.map(i => i.id)
 
@@ -71,7 +73,7 @@ function BoardContent() {
          return
       }
       const newColumnToAdd = {
-         id: Math.random().toString(36).substr(2, 5),
+         id: Math.random().toString(36).substring(2, 5),
          boardId: board.id,
          title: columnTitle.trim(),
          cardOrder: [],
@@ -89,6 +91,28 @@ function BoardContent() {
       setColumnTitle('');
       toggleInputColumn()
    }
+
+   const onUpdateColumn = (newColumnToUpdate)=>{
+
+      const columnIdToUpdate = newColumnToUpdate.id
+
+      let newColumns = [...columns]
+      const columnIndexToUpdate = newColumns.findIndex(item => item.id === columnIdToUpdate)
+
+      if(newColumnToUpdate._destroy){
+         newColumns.splice(columnIndexToUpdate, 1)
+      }else{
+         newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate)
+      }
+
+      let newBoard = { ...board };
+      newBoard.columnOrder = newColumns.map(column => column.id)
+      newBoard.columns = newColumns
+
+      setColumns(newColumns);
+      setBoard(newBoard);
+
+   }
    return (
       <div className='board-content'>
          <Container
@@ -104,7 +128,7 @@ function BoardContent() {
          >
             {columns.map((column, index) => (
                <Draggable key={index}>
-                  <Column column={column} onCardDrop={onCardDrop} />
+                  <Column column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn}/>
                </Draggable>
             ))}
 
@@ -126,6 +150,7 @@ function BoardContent() {
                      placeholder="Enter new column" 
                      className='inputEnterNewCol'
                      ref={newColumnInputRef}
+                     value= {columnTitle}
                      onChange={e => setColumnTitle(e.target.value)}
                      onKeyDown={event => (event.key === 'Enter') && handleAddColumn()}
                   />

@@ -49,15 +49,16 @@
       margin-left: $gap;
       border-bottom-left-radius: $card-border-radius;
       border-bottom-right-radius: $card-border-radius;
-      &:focus{
-         outline: none;
-      }
       input{
-         padding: 0 5px;
+         padding:  5px 0;
+         &:focus{
+            outline: none;
+            border: 1px solid $border-color;
+         }
       }
       .inputEnterNewCol{
          line-height: 35px;
-         margin-bottom: 8px;
+         margin-bottom: 5px;
       }
       .cancel-addColumn{
          margin-left: $gap;
