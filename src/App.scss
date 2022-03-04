@@ -1,5 +1,5 @@
-@import './variable';
-
+@import "./variable";
+@import "~bootstrap/scss/bootstrap";
 * {
    margin: 0;
    padding: 0;
@@ -12,9 +12,17 @@
    overflow: hidden;
    background-color: $board-bg-color;
 
-   .icon{
+   .icon {
       font-size: 14px;
-      margin-right: 5px;
-
+      margin: 0 5px;
    }
+}
+
+.trello-container{
+   margin: 0 15px;
+   padding: 0;
+}
+.btn:focus, btn:active{
+   outline: none;
+   box-shadow: none;
 }

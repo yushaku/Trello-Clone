@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { isEmpty } from 'lodash'
 import { Container, Draggable } from 'react-smooth-dnd'
+import {Container as BootstrapContainer, Row, Col, Form, Button} from 'react-bootstrap'
 
 import { mapOrder } from '../../untilities/sort.js'
 import { applyDrag } from '../../untilities/applyDrag.js'
@@ -9,8 +10,12 @@ import Column from '../Column/Column'
 import './boardcontent.scss'
 
 function BoardContent() {
+
    const [board, setBoard] = useState({});
    const [columns, setColumns] = useState([]);
+   const [openInputColumn, setOpenInputColumn] = useState(false)
+   const [columnTitle, setColumnTitle] = useState('')
+   const newColumnInputRef = useRef(null)
 
    useEffect(() => {
       const boardDb = initdata.boards.find(board => board.id === 'board-1')
@@ -21,6 +26,12 @@ function BoardContent() {
       }
    }, [])
 
+   useEffect(() => {
+      if(newColumnInputRef && newColumnInputRef.current){
+         newColumnInputRef.current.focus()
+      }
+   }, [openInputColumn])
+
    if (isEmpty(board)) {
       return (
          <div className='not-found'> board not found</div>
@@ -29,7 +40,7 @@ function BoardContent() {
 
    const onColumnDrop = (dropResult) => {
       let newColumns = [...columns];
-      let newBoard = {...board };
+      let newBoard = { ...board };
 
       newColumns = applyDrag(newColumns, dropResult);
       newBoard.columnOrder = newColumns.map(column => column.id)
@@ -40,7 +51,7 @@ function BoardContent() {
    }
 
    const onCardDrop = (columnId, dropResult) => {
-      if(dropResult.removedIndex !== null || dropResult.addedIndex !== null){
+      if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
          let newColumns = [...columns]
          let currentColumns = newColumns.find(column => column.id === columnId)
 
@@ -50,7 +61,34 @@ function BoardContent() {
 
          setColumns(newColumns)
       }
-   } 
+   }
+   const toggleInputColumn = ()=>{
+      setOpenInputColumn(!openInputColumn)
+   }
+   const handleAddColumn = ()=>{
+      if(!columnTitle){
+         newColumnInputRef.current.focus()
+         return
+      }
+      const newColumnToAdd = {
+         id: Math.random().toString(36).substr(2, 5),
+         boardId: board.id,
+         title: columnTitle.trim(),
+         cardOrder: [],
+         cards: []
+      }
+      let newColumns = [...columns]
+      newColumns.push(newColumnToAdd)
+
+      let newBoard = { ...board };
+      newBoard.columnOrder = newColumns.map(column => column.id)
+      newBoard.columns = newColumns
+
+      setColumns(newColumns);
+      setBoard(newBoard);
+      setColumnTitle('');
+      toggleInputColumn()
+   }
    return (
       <div className='board-content'>
          <Container
@@ -72,9 +110,34 @@ function BoardContent() {
 
          </Container>
 
-         <div className='addNew-column'>
-            <i className='fa fa-plus icon'/> Add another column
-         </div>
+         <BootstrapContainer className='trello-container'>
+         {!openInputColumn && 
+            <Row>
+               <Col className='addNew-column' onClick={toggleInputColumn}>
+                  <i className='fa fa-plus icon' /> Add another column
+               </Col>
+            </Row>
+         }
+         {openInputColumn && 
+            <Row>
+               <Col className='enterNew-column'>
+                  <Form.Control 
+                     type="text" 
+                     placeholder="Enter new column" 
+                     className='inputEnterNewCol'
+                     ref={newColumnInputRef}
+                     onChange={e => setColumnTitle(e.target.value)}
+                     onKeyDown={event => (event.key === 'Enter') && handleAddColumn()}
+                  />
+                  <Button className='btn' variant='info' size='sm' onClick={handleAddColumn}> add column</Button>
+                  <Button className='cancel-addColumn btn' variant='danger' size='sm' onClick={toggleInputColumn}>
+                     <i className='fa fa-trash icon'></i>   
+                  </Button>
+               </Col>
+            </Row>
+         }
+         </BootstrapContainer>
+
       </div>
    )
 }

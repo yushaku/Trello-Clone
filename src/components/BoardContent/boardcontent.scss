@@ -5,6 +5,11 @@
    overflow-y: hidden;
    height: $board-content-height;
    display: flex;
+   &::after{
+      content: "";
+      flex:0 0 10px;
+
+   }
    &::-webkit-scrollbar {
       -webkit-appearance: none;
    }
@@ -19,20 +24,60 @@
    
    .addNew-column{
 
-      width: 255px;
-      height: 32px;
+      max-width: 255px;
       font-size: 15px;
       line-height: 32px;
       color: white;
       
-      padding: 4px 0 4px 15px;
+      padding: 4px 0 -1px 10px;
       margin-left: $gap;
-      border-radius: $column-border-radius;
+      border-top-left-radius: $card-border-radius;
+      border-top-right-radius: $card-border-radius;
       cursor: pointer;
       background-color: hsla(0, 0%, 100%, .24);
       &:hover{
          background-color: hsla(0, 0%, 100%, .14);
       }
    }
+
+   .enterNew-column{
+      max-width: 255px;
+      width: 255px;
+      line-height: 32px;
+      padding: 4px;
+      background-color: hsla(0, 0%, 100%, .24);
+      margin-left: $gap;
+      border-bottom-left-radius: $card-border-radius;
+      border-bottom-right-radius: $card-border-radius;
+      &:focus{
+         outline: none;
+      }
+      input{
+         padding: 0 5px;
+      }
+      .inputEnterNewCol{
+         line-height: 35px;
+         margin-bottom: 8px;
+      }
+      .cancel-addColumn{
+         margin-left: $gap;
+         cursor: pointer;
+         width: 75px;
+         height: 27px;
+         &:hover{
+            background-color: darken($danger-color, 20);
+         }
+         &:hover .icon{
+            color: white;
+         }
+         i{
+            font-size: 18px;
+            color: rgb(201, 201, 201);
+         }
+      }
+
+   }
+
+
 
 }
