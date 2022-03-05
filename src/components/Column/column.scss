@@ -112,5 +112,15 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
          border: 1px dashed #abc;
          margin: 5px;
       }
+
+   }
+   .add-card_area{
+      padding-bottom: $gap;
+      
+      .inputNewCard{
+         max-height: 164px;
+         min-height: 54px;
+         margin-bottom: $gap;
+      }
    }
 }

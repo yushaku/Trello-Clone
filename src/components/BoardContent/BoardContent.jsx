@@ -13,7 +13,10 @@ function BoardContent() {
 
    const [board, setBoard] = useState({});
    const [columns, setColumns] = useState([]);
+   
    const [openInputColumn, setOpenInputColumn] = useState(false)
+   const toggleInputColumn = ()=> setOpenInputColumn(!openInputColumn)
+
    const [columnTitle, setColumnTitle] = useState('')
    const newColumnInputRef = useRef(null)
 
@@ -64,9 +67,29 @@ function BoardContent() {
          setColumns(newColumns)
       }
    }
-   const toggleInputColumn = ()=>{
-      setOpenInputColumn(!openInputColumn)
+
+   const onUpdateColumn = (newColumnToUpdate)=>{
+
+      const columnIdToUpdate = newColumnToUpdate.id
+
+      let newColumns = [...columns]
+      const columnIndexToUpdate = newColumns.findIndex(item => item.id === columnIdToUpdate)
+
+      if(newColumnToUpdate._destroy){
+         newColumns.splice(columnIndexToUpdate, 1)
+      }else{
+         newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate)
+      }
+
+      let newBoard = { ...board };
+      newBoard.columnOrder = newColumns.map(column => column.id)
+      newBoard.columns = newColumns
+
+      setColumns(newColumns);
+      setBoard(newBoard);
+
    }
+
    const handleAddColumn = ()=>{
       if(!columnTitle){
          newColumnInputRef.current.focus()
@@ -92,27 +115,6 @@ function BoardContent() {
       toggleInputColumn()
    }
 
-   const onUpdateColumn = (newColumnToUpdate)=>{
-
-      const columnIdToUpdate = newColumnToUpdate.id
-
-      let newColumns = [...columns]
-      const columnIndexToUpdate = newColumns.findIndex(item => item.id === columnIdToUpdate)
-
-      if(newColumnToUpdate._destroy){
-         newColumns.splice(columnIndexToUpdate, 1)
-      }else{
-         newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate)
-      }
-
-      let newBoard = { ...board };
-      newBoard.columnOrder = newColumns.map(column => column.id)
-      newBoard.columns = newColumns
-
-      setColumns(newColumns);
-      setBoard(newBoard);
-
-   }
    return (
       <div className='board-content'>
          <Container
@@ -128,7 +130,7 @@ function BoardContent() {
          >
             {columns.map((column, index) => (
                <Draggable key={index}>
-                  <Column column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn}/>
+               <Column column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn}/>
                </Draggable>
             ))}
 
@@ -155,7 +157,7 @@ function BoardContent() {
                      onKeyDown={event => (event.key === 'Enter') && handleAddColumn()}
                   />
                   <Button className='btn' variant='info' size='sm' onClick={handleAddColumn}> add column</Button>
-                  <Button className='cancel-addColumn btn' variant='danger' size='sm' onClick={toggleInputColumn}>
+                  <Button className='cancel-btn btn' variant='danger' size='sm' onClick={toggleInputColumn}>
                      <i className='fa fa-trash icon'></i>   
                   </Button>
                </Col>

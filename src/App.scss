@@ -40,3 +40,19 @@
    }
 
 }
+.cancel-btn{
+   margin-left: $gap;
+   cursor: pointer;
+   width: 75px;
+   height: 27px;
+   &:hover{
+      background-color: darken($danger-color, 20);
+   }
+   &:hover .icon{
+      color: white;
+   }
+   i{
+      font-size: 18px;
+      color: rgb(201, 201, 201);
+   }
+}
