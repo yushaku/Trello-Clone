@@ -1,11 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap");
 
-$board-bg-color: rgb(117, 226, 255);
+$board-bg-color: rgb(5, 113, 255);
 $appbar-bg-color: rgb(41, 166, 250);
-$card-bg-color: rgb(222, 247, 243);
+$card-bg-color: #ebecf0;
 $card-bg-item: rgb(255, 255, 255);
-$border-color:rgb(222, 247, 243);
+$border-color: rgb(222, 247, 243);
+
 $text-color-main: #333;
+$text-color-light: rgb(255, 255, 255);
 $danger-color: #ee5234;
 
 $gap: 10px;
@@ -15,12 +17,20 @@ $column-header-height: 36px;
 $column-footer-height: 36px;
 
 //4 + 5 + 90 = 99 vh and 1vh for scroll bar
-$navbar-app-height:4vh;
-$navbar-board-height:5vh;
-$board-content-height:90vh;
+$navbar-app-height: 6vh;
+$navbar-board-height: 6vh;
+$board-content-height: 90vh;
 
 // responsive size
 $scream-lg: 1201px;
 $scream-md: 992px;
 $scream-sm: 768px;
 $scream-phone: 480px;
+
+@mixin grassColor {
+   background: rgba(255, 255, 255, 0.11);
+   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+   border: 1px solid rgba(255, 255, 255, 0.5);
+   border-right: 1px solid rgba(255, 255, 255, 0.2);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}

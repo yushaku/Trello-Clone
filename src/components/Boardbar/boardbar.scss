@@ -5,7 +5,9 @@
    padding-left: $gap;
    display: flex;
    align-items: center;
-   background-color: $board-bg-color;
+   border: none;
+   @include grassColor;
+   background-color: darken($color: #29292957, $amount: 5);
    font-size: 1.1rem;
 }
 

@@ -10,9 +10,14 @@
 }
 .App {
    height: 100vh;
+   width: 100%;
    overflow: hidden;
-   background-color: $board-bg-color;
-
+   background: url('https://www.addictivetips.com/app/uploads/2020/04/ZAPMxXZ.png') no-repeat fixed;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+   
    .icon {
       font-size: 14px;
       margin: 0 5px;
