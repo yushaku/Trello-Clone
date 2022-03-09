@@ -4,12 +4,13 @@ import { Container, Draggable } from 'react-smooth-dnd'
 import { Dropdown, Form, Button } from 'react-bootstrap'
 import { cloneDeep } from 'lodash'
 
+import { createNewCard, updateColumn } from '../../actions/API.js'
 import Card from '../Card/Card'
 import { MODAL_ACTION_CONFIRM } from '../commom/constants'
 import ConfirmModal from '../commom/ConfirmModal.jsx'
 import './column.scss'
 
-function Column({ column, onCardDrop, onUpdateColumn }) {
+function Column({ column, onCardDrop, onUpdateColumnState }) {
 
    const [showConfirmModal, setShowConfirmModal] = useState(false)
    const [columnTitle, setColumnTitle] = useState('');
@@ -40,23 +41,27 @@ function Column({ column, onCardDrop, onUpdateColumn }) {
          return
       }
 
-      const newCardToAdd = {
-         id: Math.random().toString(36).substring(2, 5),
+      let newCardToAdd = {
+         title: cardTitle.trim(),
          boardId: column.boardId,
          columnId: column._id,
-         title: cardTitle.trim(),
-         cover: null,
       }
-      let newColumn = cloneDeep(column)
-      newColumn.cards.push(newCardToAdd);
-      newColumn.cardOrder.push(newCardToAdd._id)
-      onUpdateColumn(newColumn)
-      setCardTitle('')
-      toggleInputCard()
+
+      createNewCard(newCardToAdd).then(cardId=>{
+
+         newCardToAdd ={
+            _id: cardId,
+            ...newCardToAdd,
+            cover: null,
+         }
+         let newColumn = cloneDeep(column)
+         newColumn.cards.push(newCardToAdd);
+         newColumn.cardOrder.push(cardId)
+         onUpdateColumnState(newColumn)
+         setCardTitle('')
+         toggleInputCard()
+      })
    }
-
-
-
 
    const confirmModalAction = (type) => {
       if (type === MODAL_ACTION_CONFIRM) {
@@ -64,18 +69,22 @@ function Column({ column, onCardDrop, onUpdateColumn }) {
             ...column,
             _destroy: true
          }
-         onUpdateColumn(newColumn)
+         updateColumn(newColumn._id,newColumn)
+         onUpdateColumnState(newColumn)
       }
 
       toggleShowConfirmModal()
    }
 
    const handleUpdateColumnTitle = () => {
-      const newColumn = {
-         ...column,
-         title: columnTitle
+      if(columnTitle !== column.title){
+         const newColumn = {
+            ...column,
+            title: columnTitle
+         }
+         updateColumn(newColumn._id,newColumn)
+         onUpdateColumnState(newColumn)
       }
-      onUpdateColumn(newColumn)
    }
 
    const toggleShowConfirmModal = () => setShowConfirmModal(!showConfirmModal)
