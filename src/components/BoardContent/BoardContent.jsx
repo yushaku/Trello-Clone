@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { isEmpty } from 'lodash'
+import { isEmpty, cloneDeep } from 'lodash'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { Container as BootstrapContainer, Row, Col, Form, Button } from 'react-bootstrap'
-import { fetchBoardDetail } from '../../actions/API.js'
+
+import { fetchBoardDetail, createNewColumn, updateBoard, updateColumn, updateCard } from '../../actions/API.js'
 import { mapOrder } from '../../untilities/sort.js'
 import { applyDrag } from '../../untilities/applyDrag.js'
-import { initdata } from '../../actions/initData.js'
 import Column from '../Column/Column'
 import './boardcontent.scss'
 
@@ -24,8 +24,10 @@ function BoardContent() {
 
       const id = '6224ad67245fbe59fd575787'
       fetchBoardDetail(id).then(boardDb => {
-         setBoard(boardDb)
-         setColumns(mapOrder(boardDb.columns, boardDb.columnOrder, '_id'));
+         if(boardDb){
+            setBoard(boardDb)
+            setColumns(mapOrder(boardDb.columns, boardDb.columnOrder, '_id'));
+         }
       })
    }, [])
 
@@ -42,33 +44,61 @@ function BoardContent() {
    }
 
    const onColumnDrop = (dropResult) => {
-      let newColumns = [...columns];
 
+      let newColumns = cloneDeep(columns);
       newColumns = applyDrag(newColumns, dropResult);
 
-      let newBoard = { ...board };
+      let newBoard = cloneDeep(board);
       newBoard.columnOrder = newColumns.map(column => column._id)
       newBoard.columns = newColumns
 
-      console.log(newColumns)
-
       setColumns(newColumns);
       setBoard(newBoard);
+      
+      //call api update column orders in board detail
+      updateBoard(newBoard._id, newBoard)
+      .catch(error => {
+         console.log(error)
+         setColumns(columns);
+         setBoard(board);
+      })
    }
 
    const onCardDrop = (columnId, dropResult) => {
       if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-         let newColumns = [...columns]
+         let newColumns = cloneDeep(columns);
          let currentColumns = newColumns.find(column => column._id === columnId)
 
          currentColumns.cards = applyDrag(currentColumns.cards, dropResult)
          currentColumns.cardOrder = currentColumns.cards.map(i => i._id)
 
          setColumns(newColumns)
+
+         if(dropResult.removedIndex !== null && dropResult.addedIndex !== null){
+            //action: when u drop card on its column + call api update cardOrder in is column
+            updateColumn(currentColumns._id, currentColumns)
+            .catch(()=> setColumns(newColumns))
+
+         }else{
+            //action: when u drop card to other column
+            //call api update cardOrder in is column
+            updateColumn(currentColumns._id, currentColumns)
+            .catch(()=> setColumns(newColumns))
+
+            if(dropResult.addedIndex !== null){
+               //call api update columnId in current card
+               const currentCard = cloneDeep(dropResult.payload)
+               currentCard._id = currentColumns._id
+               updateCard(currentCard._id, currentCard).catch((error)=>{
+                  console.log(error)
+               })
+            }
+
+         }
       }
    }
 
-   const onUpdateColumn = (newColumnToUpdate) => {
+   const onUpdateColumnState = (newColumnToUpdate) => {
 
       const columnIdToUpdate = newColumnToUpdate._id
 
@@ -95,24 +125,34 @@ function BoardContent() {
          newColumnInputRef.current.focus()
          return
       }
-      const newColumnToAdd = {
-         id: Math.random().toString(36).substring(2, 5),
-         boardId: board._id,
+      let newColumnToAdd = {
          title: columnTitle.trim(),
-         cardOrder: [],
-         cards: []
+         boardId: board._id,
       }
-      let newColumns = [...columns]
-      newColumns.push(newColumnToAdd)
 
-      let newBoard = { ...board };
-      newBoard.columnOrder = newColumns.map(column => column._id)
-      newBoard.columns = newColumns
+      createNewColumn(newColumnToAdd)
+      .then(columnId=>{
 
-      setColumns(newColumns);
-      setBoard(newBoard);
-      setColumnTitle('');
-      toggleInputColumn()
+         let newColumns = [...columns]
+         newColumnToAdd = {
+            _id:columnId,
+            ...newColumnToAdd,
+            cardOrder:[],
+            cards:[]
+         }
+         newColumns.push(newColumnToAdd)
+   
+         let newBoard = { ...board };
+
+         console.log(newColumns)
+         newBoard.columnOrder = newColumns.map(column => column._id)
+         newBoard.columns = newColumns
+   
+         setColumns(newColumns);
+         setBoard(newBoard);
+         setColumnTitle('');
+         toggleInputColumn()
+      })
    }
 
    return (
@@ -130,7 +170,7 @@ function BoardContent() {
          >
             {columns.map((column, index) => (
                <Draggable key={index}>
-                  <Column column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn} />
+                  <Column column={column} onCardDrop={onCardDrop} onUpdateColumnState={onUpdateColumnState} />
                </Draggable>
             ))}
 
