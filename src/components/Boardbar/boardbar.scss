@@ -9,6 +9,63 @@
    @include grassColor;
    background-color: darken($color: #29292957, $amount: 5);
    font-size: 1.1rem;
+
+   .container{
+      @include flexCenter;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0;
+      max-width: 2048px;
+
+      .left,
+      .right,
+      .center{
+         display: flex;
+         .item{
+            @include grassColor;
+            font-size: 18px;
+            color: $text-color-light;
+            padding: 4px 12px;
+            margin: 0px 4px ;
+            border-radius: $card-border-radius;
+            cursor: pointer;
+
+            &:hover{
+               background: darken($color: #dddbdb71, $amount: 5);
+            }
+         }
+      }
+      .center{
+         .avatar{
+            left: -50px;
+            top: 0;
+            border: 1px solid rgba(175, 175, 175, 0.9);
+            border-radius: 50%;
+            @include flexCenter;
+            .avatar-img{
+               padding: .8px .8px;
+               width: 32px;
+               border-radius: 50%;
+            }
+            &:nth-child(2){
+               transform: translateX(-10px);
+            };
+            &:nth-child(3){
+               transform: translateX(-20px);
+            }
+            &:nth-child(4){
+               transform: translateX(-30px);
+            }
+            &:nth-child(5){
+               transform: translateX(-40px);
+            }
+         }
+         .addMem{
+            transform: translate(-30px);
+         }
+      }
+
+   }
 }
 
 .column-drop-preview {
