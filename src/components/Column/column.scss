@@ -32,28 +32,30 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
 
       .column-dropdown{
          flex:3%;
-         
+         border-radius: $card-border-radius;
+
          button.dropdown-btn{
             padding: 0 20px;
-            font-size: 20px;
+            font-size: 21px;
             letter-spacing: 2px;
             background: $card-bg-color;
             border-color: $card-bg-color;
             color: $text-color-main;
-
+            border: none;
             &:hover{
-               background-color: darken($card-bg-color, 10);
+               background-color: darken($card-bg-color, 5);
             }
          }
       }
+
       .dropdown-menu{
          padding: 0;
-         min-width: 200px;
+         min-width: 250px;
+         box-shadow: 3px 2px 3px rgba(133, 151, 150, 0.527);
 
          a.dropdown-item{
-            padding: 0.6rem 1rem;
-            font-size: 14px;
-            border-bottom: 1px solid #999;
+            padding: 0.6rem 1.2rem;
+            font-size: 16px;
          }
       }
    }

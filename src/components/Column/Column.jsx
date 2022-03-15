@@ -111,9 +111,15 @@ function Column({ column, onCardDrop, onUpdateColumnState }) {
                <Dropdown>
                   <Dropdown.Toggle id="dropdown-basic" size='sm' className='dropdown-btn' />
                   <Dropdown.Menu>
-                     <Dropdown.Item >Add card...</Dropdown.Item>
-                     <Dropdown.Item onClick={toggleShowConfirmModal}>remove card</Dropdown.Item>
-                     <Dropdown.Item >edit card</Dropdown.Item>
+                     <Dropdown.Item>Column action</Dropdown.Item>
+                     <Dropdown.Divider />
+                     <Dropdown.Item >Add card to column</Dropdown.Item>
+                     <Dropdown.Item onClick={toggleShowConfirmModal}>store column</Dropdown.Item>
+                     <Dropdown.Item >edit column</Dropdown.Item>
+                     <Dropdown.Item >follow</Dropdown.Item>
+                     <Dropdown.Divider />
+                     <Dropdown.Item >copy column</Dropdown.Item>
+                     <Dropdown.Item >move column</Dropdown.Item>
                   </Dropdown.Menu>
                </Dropdown>
             </div>
